@@ -1,0 +1,98 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body{
+	align-items: center;
+	font-family: sans-serif;
+	color: black;
+}
+
+#status{
+	position: absolute;
+	z-index: 100;
+	left: 0;
+}
+#count, #timer{
+	font-size: 3em;
+}
+
+img{
+	mix-blend-mode: multiply;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#layer1, #layer2{
+	position: absolute;
+}
+
+#layer0 div{
+	width: 100px;
+	height: 100px;
+	float: left;
+	background: rgb(0,255,0);
+	margin-left: 100px;
+	border-radius: 0 25px 25px 50px;
+	mix-blend-mode: exclusion;
+	animation: one 1s linear alternate infinite;
+}
+
+#layer1 div{
+	width: 100px;
+	height: 100px;
+	float: left;
+	border: 30px solid rgb(0,0,255);
+	border-right: transparent;
+	margin-left: 100px;
+	border-radius: 30% 0;
+	mix-blend-mode: exclusion;
+	animation: spin 1s linear alternate infinite;
+}
+
+#layer2 div{
+	width: 0px;
+	height: 0px;
+	background: transparent;
+/*	border-left: 150px solid transparent;*/
+	border-right: 200px solid transparent;
+	border-bottom: 200px solid rgb(255,0,0);
+	float: left;
+	margin-left: 100px;
+	mix-blend-mode: exclusion;
+	animation: spin 2s linear alternate infinite;
+}
+
+
+@keyframes one{
+	0%{
+		transform: translate(0,0);
+	}
+	50%{
+		transform: translate(100px,0);
+	}
+	100%{
+		transform: translate(100px,100px);
+	}
+}
+
+@keyframes spin{
+	0%{
+		transform: rotate(-90deg);
+	}
+	50%{
+		transform: rotate(0deg);
+	}
+	100%{
+		transform: rotate(90deg);
+	}
+}
+
+
+/*@keyframes three{
+	0%{
+		transform: scale(1, 0.5);
+	}
+	100%{
+		transform: scale(0.5, 1);
+	}
+}*/

@@ -2,6 +2,9 @@
   "name": "looper",
   "version": "0.0.1",
   "description": "collective audio loop patterns",
+  "engines": {
+      "node": "6.11.3"
+    },
   "dependencies": {
     "express": "^4.15.2",
     "socket.io": "^2.0.3"

@@ -33,22 +33,22 @@ img{
 	width: 100px;
 	height: 100px;
 	float: left;
-	background: rgb(0,255,0);
+	background: rgb(0,0,255);
 	margin-left: 100px;
-	border-radius: 0 25px 0px 50px;
+	border-radius: 0 25px 25px 50px;
 	mix-blend-mode: exclusion;
 	animation: shift 1s linear alternate infinite;
 }
 
 #layer1 div{
-	width: 130px;
-	height: 130px;
+	width: 100px;
+	height: 100px;
 	float: left;
-	border: 30px solid rgb(255,0,255);
+	border: 20px dotted rgb(0,0,255);
 	margin-left: 100px;
 	border-radius: 100%;
 	mix-blend-mode: exclusion;
-	animation: circular 1s linear alternate infinite;
+	animation: spin 1s linear alternate infinite;
 }
 
 #layer2 div{
@@ -66,7 +66,7 @@ img{
 	height: 0px;
 	background: transparent;
 	border-right: 200px solid transparent;
-	border-bottom: 200px solid rgb(255,0,0);
+	border-bottom: 200px solid rgb(0,0,255);
 	float: left;
 	margin-left: 100px;
 	mix-blend-mode: screen;
@@ -98,15 +98,6 @@ img{
 	}
 }
 
-
-@keyframes circular{
-	0%{
-		border-width: 30px;
-	}
-	100%{
-		border-width: 65px;
-	}
-}
 
 @keyframes spin{
 	0%{

@@ -2,95 +2,123 @@ $(function () {
 
   var socket = io();
 
+  var loops={};
   var track = 0;
-  var index = 0;
-  var key = 0;
-  var sounds = ['0','1','2'];
-  var tracker= 0;
-  var howls = {};
-  var looper=[];
-  var delay = 0;
+  var position = 0;
 
-  // var sound = new Howl({
-  //  src: ['/audio/sprite.mp3'],
-  //  sprite: {
-  //    loop0: [0, 2000, 1],
-  //    loop1: [3000, 2000, 1],
-  //    loop2: [6000, 4000, 1]
-  //  },
-  //  onplay: function(){
-  //      $('.track').append('<div></div>');
-  //      looper[key] = looper[key]+1;
-  //      console.log("track" + sound + " count is " + looper[key]);
-  //     }
-  // });
 
-  sounds.forEach(function(sound){
-    howls[sound] = new Howl({
-      src: ['/audio/loop' + sound + '.mp3'],
+  loops[0] = new Howl({
+      src: ['/audio/loop' + 0 + '.mp3'],
       preload: true,
+      autoplay: false,
       loop: true,
-      volume: .5,
+      volume: 1,
+      sprite:{
+        main:[0,2000,true]
+      },
       onplay: function(){
-       $('#layer'+sound).append('<div></div>');
-       loopCount[sound] = loopCount[sound]+1;
-       console.log("track" + sound + " count is " + loopCount[sound]);
+        console.log('play loop0');
+        $('#layer0').append('<div></div>');
       }
-    });
   });
-  
-  socket.on('connected', function(count,timer, loopCount){
-    $('#count').text(count);
-    loopCount.push(0);
-    socket.emit(loopCount);
-    console.log(loopCount);
-    looper = loopCount;
-
-    key = count-1;
-    $('body').append('<div id="layer'+key+'" class="track"></div>');
-    calcDelay(timer);
-
-    if (tracker === 0){//if new browser window 
-      for(var i = 0; i<loopCount.length; i++){
-        console.log(i);
-        $('body').append('<div id="layer'+i+'" class="track"></div>');
-        // sound.play('loop'+i);
-        howls[i].play();
-        // sound.seek(timer%2,'loop'+i);
-        howls[i].seek(timer%2);
-          for(var j=0; j<loopCount[i]; j++){
-            $('#layer'+i).append('<div></div>');
-          }
+  loops[1] = new Howl({
+      src: ['/audio/loop' + 1 + '.mp3'],
+      preload: true,
+      autoplay: false,
+      loop: true,
+      volume: 1,
+      sprite:{
+        main:[0,2000,true]
+      },
+      onplay: function(){
+        console.log('play loop1');
+        $('#layer1').append('<div></div>');
       }
-     tracker=1;
-    }else{//if existing browser window
-      //load new voice with delay
-      setTimeout(function() { newVoice(key); }, delay*1000);      
-    }
+  });
+  loops[2] = new Howl({
+      src: ['/audio/loop' + 2 + '.mp3'],
+      preload: true,
+      autoplay: false,
+      loop: true,
+      volume: 1,
+      sprite:{
+        main:[0,2000,true]
+      },
+      onplay: function(){
+        console.log('play loop2');
+        $('#layer2').append('<div></div>');
+      }
+  });
+  loops[3] = new Howl({
+      src: ['/audio/loop' + 3 + '.mp3'],
+      preload: true,
+      autoplay: false,
+      loop: true,
+      volume: 1,
+      sprite:{
+        main:[0,4000,true]
+      },
+      onplay: function(){
+        console.log('play loop3');
+        $('#layer3').append('<div></div>');
+      }
+  });
+
+  socket.on('connected',function(count,id,timer) {
+    console.log('connected user ' + id);
+    console.log('user count is ' + count);
+    
+    $('#count').text(count); //update number of users
+
+  });
+
+
+  //new user window
+  socket.on('newUser', function (count) {
+     console.log('first time');
+     // getPos();
+     setTimeout(function(){
+      for(var i = 0; i<count; i++){
+         console.log('for loop play loop'+i);
+         loops[i].play('main');
+         // loops[i].seek(position);
+         $('body').append('<div id="layer'+i+'" class="track"></div>')
+       }
+
+     },1000);
+    
+  });
+
+  //get play position of initial loop
+  function getPos(){
+    position = loops[0].seek('main');
+    console.log(position);
+  }
+
+  //update other users when user has joined
+  socket.on('join',function(track) {
+    console.log('timeout play loop'+track);
+    getPos();
+    
+    loops[track].play('main');
+    loops[track].seek(position);
+
+    $('body').append('<div id="layer' + track +'" class="track"></div>')
+  });
+
+  //when user disconnects
+  socket.on('disconnected',function(track){
+     console.log('disconnected user' + track);
+     loops[track].stop();
+     $('#layer' + track).remove();
+     console.log('stop loop' + track);
+     $('#count').text(track); //update number of users
   });
 
   socket.on('timer', function (data) {  
       $('#timer').text(data.timer);
-      time = data.timer;
-  });
+  }); 
 
-  socket.on('disconnected', function(count){
-      console.log('disconnected');
-      // sound.stop('loop'+key);
-      howls[key].stop();
-      $('#count').text(count); 
-  });
-
-  function calcDelay(timer){
-    delay = Math.ceil(timer/2) * 2 - timer;
-    console.log(delay);
-  }
-
-  function newVoice(key){
-    howls[key].play();
-    $('body').append('<div id="layer'+key+'" class="track"></div>');
-    // sound.play('loop'+key);
-  }
 
 
 
